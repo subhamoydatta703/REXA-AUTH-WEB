@@ -16,4 +16,31 @@ model User {
   id    String     @id @default(uuid())
   email String  @unique
   name  String?
+  chunk QueryChunk[]
+  authToken authToken[]
+}
+
+
+model authToken {
+  id String @id  @default(uuid())
+  hashedToken String 
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime 
+}
+
+
+model QueryChunk {
+  id String @id   @default(uuid())
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  content     String
+  chunkIndex  Int
+  embedding   Unsupported("vector(768)")
+
+  createdAt   DateTime  @default(now())
+
 }

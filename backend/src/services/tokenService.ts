@@ -28,19 +28,21 @@ export const tokenService = async (userId: string, expiresInMs: number = 10 * 60
         const rawToken = generateAuthToken();
         //   hash the raw token
         const hashedToken = hashToken(rawToken);
+        //   set expiry time
+         const expiresAt = new Date(Date.now() + expiresInMs);
 
         // save the token data in db
         await prisma.authToken.create({
             data: {
                 userId: userId,
                 hashedToken,
-                expiresAt: new Date(Date.now() + expiresInMs)
+                expiresAt
             }
         })
 
-        // send the rawtoken to the user
+        // send the token and expiry time to the user
         
-        return rawToken;
+        return {token: rawToken, expiresAt};
     } catch (error) {
         throw error
     }
