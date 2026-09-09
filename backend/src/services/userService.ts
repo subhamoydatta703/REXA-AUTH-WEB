@@ -7,3 +7,17 @@ export const getUserService = async (userID:string) => {
     return existingUser;
     
 }
+
+export const createUserService = async (userId:string, email:string, name:string) => {
+
+    const newUser = await prisma.user.create({
+        data:{
+            id:userId,
+            email:email,
+            name:name
+        }
+    })
+
+    return newUser;
+}
+    
