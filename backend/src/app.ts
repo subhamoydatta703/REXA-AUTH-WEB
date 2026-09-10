@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { clerkMiddleware } from '@clerk/express';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
@@ -6,6 +7,16 @@ import cliRoutes from './routes/cliRoutes';
 
 const app = express();
 
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    process.env.FRONTEND_URL || '',
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 app.use(clerkMiddleware());
 
