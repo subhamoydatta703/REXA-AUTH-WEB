@@ -36,12 +36,23 @@ export function CountdownTimer({ expiresAt, onExpire }: CountdownTimerProps) {
     return () => clearInterval(interval);
   }, [calculateRemaining, onExpire]);
 
-  const minutes = Math.floor(remainingSeconds / 60);
+  const days = Math.floor(remainingSeconds / 86400);
+  const hours = Math.floor((remainingSeconds % 86400) / 3600);
+  const minutes = Math.floor((remainingSeconds % 3600) / 60);
   const seconds = remainingSeconds % 60;
-  const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(seconds).padStart(2, "0");
 
-  const isUrgent = remainingSeconds > 0 && remainingSeconds <= 60;
+  // Show urgent state in the last hour
+  const isUrgent = remainingSeconds > 0 && remainingSeconds <= 3600;
+
+  const formatCountdown = () => {
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m`;
+    }
+    if (hours > 0) {
+      return `${hours}h ${String(minutes).padStart(2, "0")}m ${String(seconds).padStart(2, "0")}s`;
+    }
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  };
 
   return (
     <div
@@ -51,7 +62,7 @@ export function CountdownTimer({ expiresAt, onExpire }: CountdownTimerProps) {
     >
       <Clock className="h-3.5 w-3.5 shrink-0" />
       <span>
-        Expires in {formattedMinutes}:{formattedSeconds}
+        Expires in {formatCountdown()}
       </span>
     </div>
   );

@@ -11,7 +11,7 @@ const hashToken = (token: string) => {
 };
 
 
-export const generateTokenService = async (userId: string, expiresInMs: number = 10 * 60 * 1000) => {
+export const generateTokenService = async (userId: string, expiresInMs: number = 7 * 24 * 60 * 60 * 1000) => {
 
     try {
         // check if there is already existing token for this user
