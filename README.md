@@ -15,8 +15,6 @@ The authentication and token management platform for [REXA](https://github.com/s
 - [Installation](#installation)
 - [Running Locally](#running-locally)
 - [API Endpoints](#api-endpoints)
-- [Database Schema](#database-schema)
-- [Authentication Flow](#authentication-flow)
 - [Security](#security)
 - [License](#license)
 
