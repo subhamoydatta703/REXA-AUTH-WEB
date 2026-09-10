@@ -34,7 +34,7 @@ export default function DashboardPage() {
             <span>Single-Use Session Tokens</span>
           </div>
           <p className="text-neutral-400 leading-relaxed text-[11px]">
-            Generated tokens are bound to your user identity and expire strictly after 10 minutes.
+            Generated tokens are bound to your user identity and expire after 7 days.
             Tokens are never persisted on the browser or exposed in URLs.
           </p>
         </div>

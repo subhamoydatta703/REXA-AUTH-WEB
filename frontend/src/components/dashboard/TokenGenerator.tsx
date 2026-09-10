@@ -100,7 +100,7 @@ export function TokenGenerator() {
             </div>
             <ul className="list-disc pl-5 space-y-1 text-neutral-400 text-[11px]">
               <li>Your token will be shown only once.</li>
-              <li>It expires 10 minutes after generation.</li>
+              <li>It expires 7 days after generation.</li>
               <li>Never share this token or commit it to version control.</li>
             </ul>
           </div>
