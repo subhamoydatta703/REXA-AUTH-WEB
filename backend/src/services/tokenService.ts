@@ -57,7 +57,7 @@ export const verifyTokenService = async (rawToken: string) => {
         const hashedToken = hashToken(rawToken);
 
         const tokenRecord = await prisma.authToken.findFirst({
-            where: { hashedToken, expiresAt: { gt: new Date() } }
+            where: { hashedToken, expiresAt: { gt: new Date() },  }
         })
 
         if (!tokenRecord) {

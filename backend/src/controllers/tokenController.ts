@@ -61,7 +61,8 @@ export const verifyTokenController = async (req: Request, res: Response) => {
         // send response
         return res.status(200).json({
             success: true,
-            message: "Token verified successfully",   
+            message: "Token verified successfully",
+            userId:verifiedToken.userId   
         });
         
     } catch (error) {
