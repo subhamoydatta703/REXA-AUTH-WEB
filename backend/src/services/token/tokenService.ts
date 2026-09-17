@@ -1,4 +1,4 @@
-import { prisma } from "../config/db";
+import { prisma } from "../../config/db/db";
 import crypto from "node:crypto"
 
 const generateAuthToken = () => {
@@ -29,7 +29,7 @@ export const generateTokenService = async (userId: string, expiresInMs: number =
         //   hash the raw token
         const hashedToken = hashToken(rawToken);
         //   set expiry time
-         const expiresAt = new Date(Date.now() + expiresInMs);
+        const expiresAt = new Date(Date.now() + expiresInMs);
 
         // save the token data in db
         await prisma.authToken.create({
@@ -41,8 +41,8 @@ export const generateTokenService = async (userId: string, expiresInMs: number =
         })
 
         // send the token and expiry time to the user
-        
-        return {token: rawToken, expiresAt};
+
+        return { token: rawToken, expiresAt };
     } catch (error) {
         throw error
     }
@@ -57,7 +57,7 @@ export const verifyTokenService = async (rawToken: string) => {
         const hashedToken = hashToken(rawToken);
 
         const tokenRecord = await prisma.authToken.findFirst({
-            where: { hashedToken, expiresAt: { gt: new Date() },  }
+            where: { hashedToken, expiresAt: { gt: new Date() }, }
         })
 
         if (!tokenRecord) {

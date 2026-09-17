@@ -1,8 +1,12 @@
 
 import { type AuthenticatedRequest } from '../middlewares/authMiddleware';
-import type { Response } from "express";
-import { getUserService, createUserService } from '../services/userService';
+import type { Request, Response } from "express";
+import { getUserService, createUserService } from '../services/user/userService';
 import { clerkClient } from "@clerk/express";
+import { verifyTokenService } from '../services/token/tokenService';
+import { processQueryService } from '../services/processing/processQueryService';
+
+
 
 
 export const getUserById = async (req: AuthenticatedRequest, res: Response) => {
@@ -77,6 +81,72 @@ export const createUserController = async (req: AuthenticatedRequest, res: Respo
 
 
 
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+}
+
+// rexa cli verified user data
+ export const getVerifiedUserController = async (req: Request, res: Response) => {
+
+    try {
+        // checking header for token
+        const auth = req.headers.authorization;
+        if (!auth?.startsWith("Bearer ")) {
+            return res.status(401).json({
+                success: false,
+                message: "Token missing"
+            })
+        }
+
+        const data = req.body.text as string
+        // slicing the token from the header
+        const tokenString = auth.slice("Bearer ".length).trim();
+        // verify the token
+        const verifiedToken = await verifyTokenService(tokenString);
+        if (!verifiedToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid or expired token"
+            });
+        }
+        const getUserData = await getUserService(verifiedToken.userId);
+        if(!getUserData){
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+        if(!data){
+            return res.status(400).json({
+                success: false,
+                message: "No data provided"
+            })
+        }
+        if(typeof data !== "string"){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid data"
+            })
+        }
+        const cleanedData = data?.trim();
+
+        // service for save data in memory
+        await processQueryService(verifiedToken.userId, cleanedData)
+        
+        
+
+        // send response
+        return res.status(200).json({
+            success: true,
+            message: "Data saved in memory",
+            
+        });
 
     } catch (error) {
         console.error(error);
