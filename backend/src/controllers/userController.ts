@@ -122,7 +122,7 @@ export const createUserController = async (req: AuthenticatedRequest, res: Respo
                 message: "User not found"
             })
         }
-        if(!data){
+        if(!data || data.trim().length === 0){
             return res.status(400).json({
                 success: false,
                 message: "No data provided"
