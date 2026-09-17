@@ -1,9 +1,8 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { getUserService } from "../user/userService";
 
-/**
- * Validates the user and splits the text into semantic chunks using LangChain text splitter.
- */
+// Validates the user and splits the text into semantic chunks using LangChain text splitter.
+ 
 export const createChunks = async (userId: string, textData: string): Promise<string[]> => {
   try {
     const user = await getUserService(userId);
@@ -27,4 +26,4 @@ export const createChunks = async (userId: string, textData: string): Promise<st
     console.error("Error in chunk service: ", error);
     throw error;
   }
-};
+};

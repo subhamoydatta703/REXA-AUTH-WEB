@@ -6,9 +6,8 @@ export interface ChunkBatchItem {
   index: number;
 }
 
-/**
- * Processes a batch of text chunks concurrently by generating embeddings and inserting vectors into pgvector.
- */
+// Processes a batch of text chunks concurrently by generating embeddings and inserting vectors into pgvector.
+ 
 export const processBatch = async (batch: ChunkBatchItem[], userId: string) => {
   try {
     await Promise.all(

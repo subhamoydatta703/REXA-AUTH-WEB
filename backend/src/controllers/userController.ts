@@ -3,8 +3,9 @@ import { type AuthenticatedRequest } from '../middlewares/authMiddleware';
 import type { Request, Response } from "express";
 import { getUserService, createUserService } from '../services/user/userService';
 import { clerkClient } from "@clerk/express";
-import { verifyTokenController } from './tokenController';
 import { verifyTokenService } from '../services/token/tokenService';
+import { processQueryService } from '../services/processing/processQueryService';
+
 
 
 
@@ -103,7 +104,7 @@ export const createUserController = async (req: AuthenticatedRequest, res: Respo
             })
         }
 
-        const data = req.body.text
+        const data = req.body.text as string
         // slicing the token from the header
         const tokenString = auth.slice("Bearer ".length).trim();
         // verify the token
@@ -121,8 +122,22 @@ export const createUserController = async (req: AuthenticatedRequest, res: Respo
                 message: "User not found"
             })
         }
+        if(!data){
+            return res.status(400).json({
+                success: false,
+                message: "No data provided"
+            })
+        }
+        if(typeof data !== "string"){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid data"
+            })
+        }
+        const cleanedData = data?.trim();
 
         // service for save data in memory
+        await processQueryService(verifiedToken.userId, cleanedData)
         
         
 

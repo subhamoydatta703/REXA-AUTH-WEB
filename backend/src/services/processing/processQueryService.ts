@@ -1,9 +1,8 @@
 import { createChunks } from "./chunkService";
 import { processBatch, type ChunkBatchItem } from "./processBatchService";
 
-/**
- * Orchestrates the query processing pipeline: user validation, chunking, batch embedding, and vector storage.
- */
+// Orchestrates the query processing pipeline: user validation, chunking, batch embedding, and vector storage.
+ 
 export const processQueryService = async (userId: string, textData: string) => {
   try {
     const chunks = await createChunks(userId, textData);
@@ -25,11 +24,10 @@ export const processQueryService = async (userId: string, textData: string) => {
     if (batch.length > 0) {
       await processBatch(batch, userId);
     }
+    
   } catch (error) {
     console.error("Error in processQueryService: ", error);
     throw error;
   }
 };
 
-// Backward-compatible alias
-export const processDocumentService = processQueryService;

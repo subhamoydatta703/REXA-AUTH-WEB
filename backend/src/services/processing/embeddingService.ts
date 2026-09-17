@@ -1,8 +1,7 @@
 import { aiEmbedding } from "../../config/ai/ai";
 
-/**
- * Generates 768-dimensional vector embeddings for a text chunk using Gemini embedding model.
- */
+// Generates 768-dimensional vector embeddings for a text chunk using Gemini embedding model.
+ 
 export const createEmbeddings = async (chunk: string): Promise<number[]> => {
   try {
     const response = await aiEmbedding.models.embedContent({
@@ -22,4 +21,4 @@ export const createEmbeddings = async (chunk: string): Promise<number[]> => {
     console.error("Error creating embeddings: ", error);
     throw error;
   }
-};
+};
