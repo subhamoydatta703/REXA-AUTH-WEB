@@ -1,22 +1,23 @@
 
 import { type AuthenticatedRequest } from '../middlewares/authMiddleware';
-import  { type Request, type Response } from "express";
+import { type Request, type Response } from "express";
 
-import {generateTokenService, verifyTokenService} from "../services/tokenService"
+import { generateTokenService, verifyTokenService } from "../services/token/tokenService"
+import { getUserService } from '../services/user/userService';
 
 
 export const userTokenController = async (req: AuthenticatedRequest, res: Response) => {
 
     try {
         // checking is the req has userId
-        if(!req.userId){
+        if (!req.userId) {
             return res.status(404).json({
-                success:false,
-                message:"Invalid user"
+                success: false,
+                message: "Invalid user"
             })
         }
         // get the token and expiry time using the user id
-        const {token, expiresAt} = await generateTokenService(req.userId);
+        const { token, expiresAt } = await generateTokenService(req.userId);
         return res.status(200).json({
             success: true,
             message: "Token generated successfully",
@@ -27,8 +28,8 @@ export const userTokenController = async (req: AuthenticatedRequest, res: Respon
     } catch (error) {
         console.error(error);
         return res.status(500).json({
-            success:false,
-            message:"Internal server error",
+            success: false,
+            message: "Internal server error",
         });
     }
 }
@@ -44,8 +45,8 @@ export const verifyTokenController = async (req: Request, res: Response) => {
         const auth = req.headers.authorization;
         if (!auth?.startsWith("Bearer ")) {
             return res.status(401).json({
-                success:false,
-                message:"Token missing"
+                success: false,
+                message: "Token missing"
             })
         }
         // slicing the token from the header
@@ -54,22 +55,26 @@ export const verifyTokenController = async (req: Request, res: Response) => {
         const verifiedToken = await verifyTokenService(tokenString);
         if (!verifiedToken) {
             return res.status(401).json({
-                success: false, 
-                message: "Invalid or expired token" 
+                success: false,
+                message: "Invalid or expired token"
             });
         }
         // send response
         return res.status(200).json({
             success: true,
             message: "Token verified successfully",
-            userId:verifiedToken.userId   
+            userId: verifiedToken.userId
         });
-        
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({
-            success:false,
-            message:"Internal server error",
+            success: false,
+            message: "Internal server error",
         });
     }
 }
+
+
+
+

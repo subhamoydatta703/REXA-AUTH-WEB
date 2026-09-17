@@ -1,4 +1,4 @@
-import { prisma } from "../config/db";
+import { prisma } from "../../config/db/db";
 
 
 export const getUserService = async (userID:string) => {
